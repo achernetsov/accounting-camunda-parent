@@ -1,0 +1,6 @@
+camunda.bpm.client:
+  base-url: http://localhost:8080/engine-rest
+
+file:
+  folder: ${LEDGER_FOLDER:"/home/ac/tmp"}
+  name: finances.ledger

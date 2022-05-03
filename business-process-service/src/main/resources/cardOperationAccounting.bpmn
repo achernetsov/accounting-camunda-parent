@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:bioc="http://bpmn.io/schema/bpmn/biocolor/1.0" xmlns:color="http://www.omg.org/spec/BPMN/non-normative/color/1.0" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0jvoz3y" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.11.1" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.15.0">
+  <bpmn:collaboration id="Collaboration_0k5583c">
+    <bpmn:participant id="Participant_0894krn" name="Me" processRef="cardOperationAccounting" />
+    <bpmn:participant id="Participant_1qyqog9" name="Bank norifications service" processRef="Process_0yqkh33" />
+    <bpmn:messageFlow id="Flow_17m5lm1" sourceRef="Activity_0cbt6qa" targetRef="cardOperationNotificationReceived" />
+  </bpmn:collaboration>
+  <bpmn:process id="cardOperationAccounting" isExecutable="true">
+    <bpmn:sequenceFlow id="Flow_0q4oihj" sourceRef="cardOperationNotificationReceived" targetRef="Activity_0nss9rc" />
+    <bpmn:sequenceFlow id="Flow_09p39ty" sourceRef="Activity_0nss9rc" targetRef="Event_195l5kr" />
+    <bpmn:startEvent id="cardOperationNotificationReceived" name="Card operation notification received&#10;&#10;">
+      <bpmn:outgoing>Flow_0q4oihj</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_08aof67" messageRef="Message_1jg87fi" />
+    </bpmn:startEvent>
+    <bpmn:endEvent id="Event_195l5kr" name="Card operation accounted">
+      <bpmn:incoming>Flow_09p39ty</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:serviceTask id="Activity_0nss9rc" name="Save operation data to ledger" camunda:type="external" camunda:topic="ledger.add-tx">
+      <bpmn:incoming>Flow_0q4oihj</bpmn:incoming>
+      <bpmn:outgoing>Flow_09p39ty</bpmn:outgoing>
+    </bpmn:serviceTask>
+  </bpmn:process>
+  <bpmn:process id="Process_0yqkh33" isExecutable="false">
+    <bpmn:startEvent id="Event_09rgbnd" name="Card operation performed">
+      <bpmn:outgoing>Flow_0ih29jr</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:endEvent id="Event_1o6ltlx" name="Notification sent">
+      <bpmn:incoming>Flow_1o1ylwq</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:task id="Activity_0cbt6qa" name="Notify about card operation">
+      <bpmn:incoming>Flow_0ih29jr</bpmn:incoming>
+      <bpmn:outgoing>Flow_1o1ylwq</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:sequenceFlow id="Flow_0ih29jr" sourceRef="Event_09rgbnd" targetRef="Activity_0cbt6qa" />
+    <bpmn:sequenceFlow id="Flow_1o1ylwq" sourceRef="Activity_0cbt6qa" targetRef="Event_1o6ltlx" />
+  </bpmn:process>
+  <bpmn:message id="Message_0xt1yd7" />
+  <bpmn:message id="Message_1jg87fi" name="cardOperationNotificationReceived" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_0k5583c">
+      <bpmndi:BPMNShape id="Participant_0894krn_di" bpmnElement="Participant_0894krn" isHorizontal="true" bioc:stroke="#8e24aa" bioc:fill="#e1bee7" color:background-color="#e1bee7" color:border-color="#8e24aa">
+        <dc:Bounds x="160" y="332" width="780" height="238" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_09p39ty_di" bpmnElement="Flow_09p39ty">
+        <di:waypoint x="540" y="457" />
+        <di:waypoint x="592" y="457" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0q4oihj_di" bpmnElement="Flow_0q4oihj">
+        <di:waypoint x="388" y="457" />
+        <di:waypoint x="440" y="457" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_0dpeqrj_di" bpmnElement="cardOperationNotificationReceived">
+        <dc:Bounds x="352" y="439" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="334" y="482" width="73" height="66" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_195l5kr_di" bpmnElement="Event_195l5kr">
+        <dc:Bounds x="592" y="439" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="574" y="482" width="73" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0e9w6zx_di" bpmnElement="Activity_0nss9rc">
+        <dc:Bounds x="440" y="417" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Participant_1qyqog9_di" bpmnElement="Participant_1qyqog9" isHorizontal="true" bioc:stroke="#43a047" bioc:fill="#c8e6c9" color:background-color="#c8e6c9" color:border-color="#43a047">
+        <dc:Bounds x="160" y="120" width="780" height="212" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1o1ylwq_di" bpmnElement="Flow_1o1ylwq">
+        <di:waypoint x="420" y="210" />
+        <di:waypoint x="452" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0ih29jr_di" bpmnElement="Flow_0ih29jr">
+        <di:waypoint x="268" y="210" />
+        <di:waypoint x="320" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_09rgbnd_di" bpmnElement="Event_09rgbnd">
+        <dc:Bounds x="232" y="192" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="214" y="235" width="73" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1o6ltlx_di" bpmnElement="Event_1o6ltlx">
+        <dc:Bounds x="452" y="192" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="431" y="235" width="79" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0cbt6qa_di" bpmnElement="Activity_0cbt6qa">
+        <dc:Bounds x="320" y="170" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_17m5lm1_di" bpmnElement="Flow_17m5lm1">
+        <di:waypoint x="370" y="250" />
+        <di:waypoint x="370" y="439" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
